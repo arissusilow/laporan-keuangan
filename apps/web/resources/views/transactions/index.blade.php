@@ -46,9 +46,13 @@
                     <label for="period-shortcut-input">Bulan dan tahun</label>
                     <div class="month-picker-control">
                         <input class="input" id="period-shortcut-input" type="month" name="period" value="{{ $periodAnchor->format('Y-m') }}" min="1900-01" max="2100-12" required data-month-picker-input>
-                        <button type="button" data-month-picker-button aria-label="Buka kalender bulan dan tahun" title="Buka kalender">
+                        <button type="button" data-month-picker-button aria-label="Buka kalender bulan dan tahun" aria-expanded="false" title="Buka kalender">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v3M17 2v3M3.5 9h17M5.5 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg>
                         </button>
+                        <div class="month-picker-panel" data-month-picker-panel hidden>
+                            <label>Tahun<select class="input" data-month-picker-year aria-label="Pilih tahun"></select></label>
+                            <div class="month-picker-grid" data-month-picker-grid aria-label="Pilih bulan"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-actions"><a class="btn btn-secondary" href="{{ request()->fullUrl() }}">Batal</a><button class="btn btn-primary" type="submit">Tampilkan</button></div>
@@ -57,14 +61,21 @@
     </div>
 @endif
 
-<form class="card transaction-filters no-print" method="get">
-    <input type="hidden" name="view" value="{{ $periodMode }}">
-    <input type="hidden" name="period" value="{{ $periodAnchor->toDateString() }}">
-    <div class="field"><label for="type">Arus transaksi</label><select class="input" id="type" name="type"><option value="">Pemasukan dan Pengeluaran</option><option value="IN" @selected(($filters['type'] ?? '') === 'IN')>Pemasukan</option><option value="OUT" @selected(($filters['type'] ?? '') === 'OUT')>Pengeluaran</option></select></div>
-    <div class="field"><label for="category">Kategori</label><select class="input" id="category" name="category"><option value="">Semua</option>@foreach($categories as $cat)<option value="{{ $cat->id }}" @selected(($filters['category'] ?? '') == $cat->id)>{{ $cat->name }}</option>@endforeach</select></div>
-    <div class="field"><label for="q">Cari</label><input class="input" id="q" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Keterangan"></div>
-    <div class="filter-submit"><button class="btn btn-secondary">Terapkan filter</button>@if(array_filter($filters, fn ($value, $key) => in_array($key, ['type', 'category', 'q', 'sort'], true) && filled($value), ARRAY_FILTER_USE_BOTH))<a class="text-action" href="{{ route('transactions.index', $report) }}?view={{ $periodMode }}&period={{ $periodAnchor->toDateString() }}">Reset</a>@endif</div>
-</form>
+@php($hasTransactionFilters = collect(['type', 'category', 'q', 'sort'])->contains(fn ($key) => filled($filters[$key] ?? null)))
+<details class="card transaction-filter-disclosure no-print" @if($hasTransactionFilters) open @endif>
+    <summary class="transaction-filter-toggle">
+        <span>Filter &amp; Pencarian @if($hasTransactionFilters)<small>Aktif</small>@endif</span>
+        <span class="transaction-filter-chevron" aria-hidden="true">⌄</span>
+    </summary>
+    <form class="transaction-filters" method="get">
+        <input type="hidden" name="view" value="{{ $periodMode }}">
+        <input type="hidden" name="period" value="{{ $periodAnchor->toDateString() }}">
+        <div class="field"><label for="type">Arus transaksi</label><select class="input" id="type" name="type"><option value="">Pemasukan dan Pengeluaran</option><option value="IN" @selected(($filters['type'] ?? '') === 'IN')>Pemasukan</option><option value="OUT" @selected(($filters['type'] ?? '') === 'OUT')>Pengeluaran</option></select></div>
+        <div class="field"><label for="category">Kategori</label><select class="input" id="category" name="category"><option value="">Semua</option>@foreach($categories as $cat)<option value="{{ $cat->id }}" @selected(($filters['category'] ?? '') == $cat->id)>{{ $cat->name }}</option>@endforeach</select></div>
+        <div class="field"><label for="q">Cari</label><input class="input" id="q" name="q" value="{{ $filters['q'] ?? '' }}" placeholder="Keterangan"></div>
+        <div class="filter-submit"><button class="btn btn-secondary">Terapkan filter</button>@if($hasTransactionFilters)<a class="text-action" href="{{ route('transactions.index', $report) }}?view={{ $periodMode }}&period={{ $periodAnchor->toDateString() }}">Reset</a>@endif</div>
+    </form>
+</details>
 
 <section class="card">
     <div class="section-heading transaction-list-heading"><div><h2>{{ ['day' => 'Transaksi harian', 'week' => 'Ringkasan mingguan', 'month' => 'Ringkasan bulanan', 'year' => 'Ringkasan tahunan'][$periodMode] }}</h2><p class="muted">{{ $periodLabel }} · {{ number_format($breakdownTransactionCount, 0, ',', '.') }} transaksi aktif</p></div></div>

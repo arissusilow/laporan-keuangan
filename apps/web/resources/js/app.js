@@ -235,20 +235,67 @@ document.querySelectorAll('[data-rupiah-input]').forEach((input) => {
 });
 
 document.querySelectorAll('[data-month-picker-button]').forEach((button) => {
-    button.addEventListener('click', () => {
-        const input = button.closest('.month-picker-control')?.querySelector('[data-month-picker-input]');
-        if (! input) return;
+    const control = button.closest('.month-picker-control');
+    const input = control?.querySelector('[data-month-picker-input]');
+    const panel = control?.querySelector('[data-month-picker-panel]');
+    const yearSelect = control?.querySelector('[data-month-picker-year]');
+    const monthGrid = control?.querySelector('[data-month-picker-grid]');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
-        input.focus();
-        if (typeof input.showPicker === 'function') {
-            try {
-                input.showPicker();
-            } catch (error) {
-                input.click();
-            }
-        } else {
-            input.click();
-        }
+    if (! input || ! panel || ! yearSelect || ! monthGrid) return;
+
+    for (let year = 2100; year >= 1900; year -= 1) {
+        const option = document.createElement('option');
+        option.value = String(year);
+        option.textContent = String(year);
+        yearSelect.appendChild(option);
+    }
+
+    function selectedParts() {
+        const match = input.value.match(/^(\d{4})-(\d{2})$/);
+        return match ? {year: Number(match[1]), month: Number(match[2])} : {year: new Date().getFullYear(), month: new Date().getMonth() + 1};
+    }
+
+    function renderMonths() {
+        const selected = selectedParts();
+        const displayedYear = Number(yearSelect.value || selected.year);
+        monthGrid.replaceChildren();
+        monthNames.forEach((name, index) => {
+            const month = index + 1;
+            const monthButton = document.createElement('button');
+            monthButton.type = 'button';
+            monthButton.textContent = name;
+            monthButton.classList.toggle('is-selected', displayedYear === selected.year && month === selected.month);
+            monthButton.setAttribute('aria-label', `${name} ${displayedYear}`);
+            monthButton.addEventListener('click', () => {
+                input.value = `${displayedYear}-${String(month).padStart(2, '0')}`;
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+                panel.hidden = true;
+                button.setAttribute('aria-expanded', 'false');
+                input.focus();
+            });
+            monthGrid.appendChild(monthButton);
+        });
+    }
+
+    button.addEventListener('click', () => {
+        const willOpen = panel.hidden;
+        document.querySelectorAll('[data-month-picker-panel]').forEach((otherPanel) => { otherPanel.hidden = true; });
+        document.querySelectorAll('[data-month-picker-button]').forEach((otherButton) => { otherButton.setAttribute('aria-expanded', 'false'); });
+        if (! willOpen) return;
+
+        yearSelect.value = String(selectedParts().year);
+        renderMonths();
+        panel.hidden = false;
+        button.setAttribute('aria-expanded', 'true');
+        yearSelect.focus();
+    });
+
+    yearSelect.addEventListener('change', renderMonths);
+    document.addEventListener('click', (event) => {
+        if (control.contains(event.target)) return;
+        panel.hidden = true;
+        button.setAttribute('aria-expanded', 'false');
     });
 });
 
