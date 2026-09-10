@@ -234,6 +234,24 @@ document.querySelectorAll('[data-rupiah-input]').forEach((input) => {
     formatRupiah();
 });
 
+document.querySelectorAll('[data-month-picker-button]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const input = button.closest('.month-picker-control')?.querySelector('[data-month-picker-input]');
+        if (! input) return;
+
+        input.focus();
+        if (typeof input.showPicker === 'function') {
+            try {
+                input.showPicker();
+            } catch (error) {
+                input.click();
+            }
+        } else {
+            input.click();
+        }
+    });
+});
+
 document.querySelectorAll('[data-transaction-form]').forEach((form) => {
     const typeButtons = Array.from(form.querySelectorAll('[data-transaction-type]'));
     const categorySelect = form.querySelector('[data-category-select]');

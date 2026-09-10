@@ -498,6 +498,13 @@ textarea.input { min-height: 106px; resize: vertical; }
 .period-picker-trigger { display: grid; min-width: 0; color: inherit; cursor: pointer; text-decoration: none; }
 .period-picker-trigger:focus-visible { border-radius: 4px; outline: 2px solid #d6a84b; outline-offset: 3px; }
 .period-picker-modal { width: min(100%, 430px); }
+.month-picker-control { position: relative; }
+.month-picker-control .input { padding-right: 3.25rem; }
+.month-picker-control input[type="month"]::-webkit-calendar-picker-indicator { opacity: 0; pointer-events: none; }
+.month-picker-control [data-month-picker-button] { position: absolute; top: 50%; right: 3px; display: grid; width: 40px; height: 40px; padding: 0; place-items: center; border: 0; border-left: 1px solid #d9ded9; border-radius: 0 8px 8px 0; background: #fff; color: #1b513e; cursor: pointer; transform: translateY(-50%); }
+.month-picker-control [data-month-picker-button]:hover { background: #edf2ee; }
+.month-picker-control [data-month-picker-button]:focus-visible { outline: 2px solid #d6a84b; outline-offset: -2px; }
+.month-picker-control svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 .period-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #12372a; }
 .period-tabs a { position: relative; min-width: 0; padding: .75rem .45rem; color: rgba(255,255,255,.72); font-size: .8rem; font-weight: 700; text-align: center; text-decoration: none; }
 .period-tabs a::after { position: absolute; right: 20%; bottom: 0; left: 20%; height: 3px; border-radius: 4px 4px 0 0; background: transparent; content: ""; }

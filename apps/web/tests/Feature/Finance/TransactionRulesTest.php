@@ -273,6 +273,7 @@ class TransactionRulesTest extends TestCase
         ]))->assertOk()
             ->assertSee('September 2026')
             ->assertSee('aria-label="Pilih bulan dan tahun"', false)
+            ->assertSee('aria-label="Buka kalender bulan dan tahun"', false)
             ->assertSee('type="month"', false)
             ->assertSee('value="2026-09"', false)
             ->assertSee('Pemasukan September')

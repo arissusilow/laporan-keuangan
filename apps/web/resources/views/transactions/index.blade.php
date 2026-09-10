@@ -42,7 +42,15 @@
                 @foreach(['type', 'category', 'q', 'sort'] as $filterName)
                     @if(filled($filters[$filterName] ?? null))<input type="hidden" name="{{ $filterName }}" value="{{ $filters[$filterName] }}">@endif
                 @endforeach
-                <div class="field"><label for="period-shortcut-input">Bulan dan tahun</label><input class="input" id="period-shortcut-input" type="month" name="period" value="{{ $periodAnchor->format('Y-m') }}" min="1900-01" max="2100-12" required></div>
+                <div class="field">
+                    <label for="period-shortcut-input">Bulan dan tahun</label>
+                    <div class="month-picker-control">
+                        <input class="input" id="period-shortcut-input" type="month" name="period" value="{{ $periodAnchor->format('Y-m') }}" min="1900-01" max="2100-12" required data-month-picker-input>
+                        <button type="button" data-month-picker-button aria-label="Buka kalender bulan dan tahun" title="Buka kalender">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v3M17 2v3M3.5 9h17M5.5 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg>
+                        </button>
+                    </div>
+                </div>
                 <div class="modal-actions"><a class="btn btn-secondary" href="{{ request()->fullUrl() }}">Batal</a><button class="btn btn-primary" type="submit">Tampilkan</button></div>
             </form>
         </section>
