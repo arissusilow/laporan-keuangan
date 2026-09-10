@@ -508,7 +508,7 @@ textarea.input { min-height: 106px; resize: vertical; }
 .month-picker-panel { position: absolute; z-index: 120; top: calc(100% + .4rem); right: 0; left: 0; padding: .8rem; border: 1px solid #d9ded9; border-radius: 12px; background: #fff; box-shadow: 0 16px 38px rgba(7,28,21,.24); }
 .month-picker-panel[hidden] { display: none; }
 .month-picker-panel label { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .65rem; margin-bottom: .7rem; color: #526158; font-size: .78rem; font-weight: 700; }
-.month-picker-panel select.input { min-height: 40px; padding-block: .45rem; }
+.month-picker-panel input.input { min-height: 40px; padding-block: .45rem; }
 .month-picker-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
 .month-picker-grid button { min-height: 38px; padding: .35rem; border: 1px solid #d9ded9; border-radius: 8px; background: #f7f9f7; color: #25352c; cursor: pointer; font: inherit; font-size: .78rem; font-weight: 650; }
 .month-picker-grid button:hover { border-color: #1b513e; background: #edf5f0; color: #12372a; }

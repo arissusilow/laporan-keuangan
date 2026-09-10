@@ -50,7 +50,7 @@
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v3M17 2v3M3.5 9h17M5.5 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg>
                         </button>
                         <div class="month-picker-panel" data-month-picker-panel hidden>
-                            <label>Tahun<select class="input" data-month-picker-year aria-label="Pilih tahun"></select></label>
+                            <label>Tahun<input class="input" type="number" min="1900" max="2100" step="1" inputmode="numeric" data-month-picker-year aria-label="Pilih tahun"></label>
                             <div class="month-picker-grid" data-month-picker-grid aria-label="Pilih bulan"></div>
                         </div>
                     </div>

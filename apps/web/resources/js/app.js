@@ -244,13 +244,6 @@ document.querySelectorAll('[data-month-picker-button]').forEach((button) => {
 
     if (! input || ! panel || ! yearSelect || ! monthGrid) return;
 
-    for (let year = 2100; year >= 1900; year -= 1) {
-        const option = document.createElement('option');
-        option.value = String(year);
-        option.textContent = String(year);
-        yearSelect.appendChild(option);
-    }
-
     function selectedParts() {
         const match = input.value.match(/^(\d{4})-(\d{2})$/);
         return match ? {year: Number(match[1]), month: Number(match[2])} : {year: new Date().getFullYear(), month: new Date().getMonth() + 1};
@@ -258,7 +251,8 @@ document.querySelectorAll('[data-month-picker-button]').forEach((button) => {
 
     function renderMonths() {
         const selected = selectedParts();
-        const displayedYear = Number(yearSelect.value || selected.year);
+        const requestedYear = Number(yearSelect.value);
+        const displayedYear = Number.isInteger(requestedYear) && requestedYear >= 1900 && requestedYear <= 2100 ? requestedYear : selected.year;
         monthGrid.replaceChildren();
         monthNames.forEach((name, index) => {
             const month = index + 1;
@@ -278,19 +272,34 @@ document.querySelectorAll('[data-month-picker-button]').forEach((button) => {
         });
     }
 
-    button.addEventListener('click', () => {
-        const willOpen = panel.hidden;
-        document.querySelectorAll('[data-month-picker-panel]').forEach((otherPanel) => { otherPanel.hidden = true; });
-        document.querySelectorAll('[data-month-picker-button]').forEach((otherButton) => { otherButton.setAttribute('aria-expanded', 'false'); });
-        if (! willOpen) return;
-
+    function openCustomPicker() {
         yearSelect.value = String(selectedParts().year);
         renderMonths();
         panel.hidden = false;
         button.setAttribute('aria-expanded', 'true');
         yearSelect.focus();
+        yearSelect.select();
+    }
+
+    button.addEventListener('click', () => {
+        document.querySelectorAll('[data-month-picker-panel]').forEach((otherPanel) => { otherPanel.hidden = true; });
+        document.querySelectorAll('[data-month-picker-button]').forEach((otherButton) => { otherButton.setAttribute('aria-expanded', 'false'); });
+        const needsCustomPicker = /Firefox/i.test(navigator.userAgent) || typeof input.showPicker !== 'function';
+        if (! needsCustomPicker) {
+            input.focus();
+            try {
+                input.showPicker();
+                return;
+            } catch (error) {
+                openCustomPicker();
+                return;
+            }
+        }
+
+        openCustomPicker();
     });
 
+    yearSelect.addEventListener('input', renderMonths);
     yearSelect.addEventListener('change', renderMonths);
     document.addEventListener('click', (event) => {
         if (control.contains(event.target)) return;
