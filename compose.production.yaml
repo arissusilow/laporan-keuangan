@@ -1,5 +1,7 @@
 services:
   db:
+    # Debian-based image remains compatible with the CentOS 7 production host.
+    image: postgres:17-bookworm
     ports: []
   app:
     environment:
