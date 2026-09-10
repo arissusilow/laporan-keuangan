@@ -15,6 +15,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // The production web container is only reachable through the trusted
+        // Apache reverse proxy, which serves this app from a URL subpath.
+        $middleware->trustProxies(
+            at: '*',
+            headers: Request::HEADER_X_FORWARDED_FOR
+                | Request::HEADER_X_FORWARDED_HOST
+                | Request::HEADER_X_FORWARDED_PORT
+                | Request::HEADER_X_FORWARDED_PROTO
+                | Request::HEADER_X_FORWARDED_PREFIX,
+        );
+
         $middleware->web(append: [ApplyApplicationSettings::class]);
         $middleware->alias([
             'password.changed' => EnsureInitialPasswordChanged::class,
