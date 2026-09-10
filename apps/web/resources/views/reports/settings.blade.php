@@ -35,7 +35,7 @@
 </nav>
 
 @if($tab === 'general')
-    <form class="card settings-panel" method="post" action="{{ $settingsUrl('general') }}">
+    <form class="card settings-panel" method="post" action="{{ route('reports.update', $report) }}">
         @csrf @method('PUT')
         <div class="section-heading"><div><h2>Identitas dan saldo awal</h2><p class="muted">Perubahan saldo awal wajib disertai alasan dan masuk audit.</p></div></div>
         @include('reports.partials.fields', ['report' => $report])

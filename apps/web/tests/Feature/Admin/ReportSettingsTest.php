@@ -14,6 +14,34 @@ class ReportSettingsTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
+    public function test_general_settings_form_submits_to_the_report_update_route(): void
+    {
+        $admin = User::factory()->create();
+        $report = ReportSession::factory()->create();
+        ReportSessionMember::factory()->admin()->for($report, 'report')->for($admin)->create();
+
+        $this->actingAs($admin)->get(route('reports.settings', ['report' => $report, 'tab' => 'general']))
+            ->assertOk()
+            ->assertSee('action="'.route('reports.update', $report).'"', false);
+
+        $this->actingAs($admin)->put(route('reports.update', $report), [
+            'name' => 'Laporan Uji Diperbarui',
+            'description' => null,
+            'starts_on' => null,
+            'ends_on' => null,
+            'opening_balance' => $report->opening_balance,
+            'opening_balance_reason' => null,
+            'status' => 'ARCHIVED',
+            'color' => '#12372A',
+        ])->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('report_sessions', [
+            'id' => $report->id,
+            'name' => 'Laporan Uji Diperbarui',
+            'status' => 'ARCHIVED',
+        ]);
+    }
+
     public function test_settings_shows_registered_users_as_email_autocomplete_options(): void
     {
         $admin = User::factory()->create();
