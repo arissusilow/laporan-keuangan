@@ -1,0 +1,1 @@
+@extends('layouts.app') @section('title','Terjadi gangguan') @section('content')<div class="card empty"><h1>Terjadi gangguan</h1><p class="muted">Permintaan belum dapat diproses. Coba kembali atau hubungi administrator.</p><a class="btn btn-primary" href="{{ url('/') }}">Coba kembali</a></div>@endsection

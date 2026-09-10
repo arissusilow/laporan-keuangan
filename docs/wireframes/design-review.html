@@ -1,0 +1,519 @@
+<style>
+#finance-design-review {
+  color: light-dark(#17211c, #edf4ef);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+#finance-design-review * { box-sizing: border-box; }
+#finance-design-review .ldr-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 18px;
+}
+#finance-design-review .ldr-tab {
+  appearance: none;
+  border: 1px solid light-dark(#b9c4bd, #506158);
+  border-radius: 10px;
+  background: light-dark(#ffffff, #17211c);
+  color: inherit;
+  min-height: 44px;
+  padding: 9px 16px;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+#finance-design-review .ldr-tab[aria-selected="true"] {
+  background: #12372a;
+  border-color: #12372a;
+  color: #ffffff;
+}
+#finance-design-review .ldr-tab:focus-visible { outline: 3px solid #d6a84b; outline-offset: 2px; }
+#finance-design-review .ldr-pane[hidden] { display: none; }
+#finance-design-review .ldr-pane {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 8% 4%, rgba(214,168,75,.18) 0 74px, transparent 75px),
+    radial-gradient(circle at 94% 94%, rgba(18,55,42,.20) 0 120px, transparent 121px),
+    linear-gradient(135deg, rgba(214,168,75,.06), transparent 42%),
+    light-dark(#e8ece8, #0d1511);
+  border: 1px solid light-dark(#d9ded9, #435047);
+  border-radius: 18px;
+  padding: 22px;
+  overflow: hidden;
+}
+#finance-design-review .ldr-pane::before,
+#finance-design-review .ldr-pane::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 999px;
+  opacity: .52;
+}
+#finance-design-review .ldr-pane::before {
+  width: 240px;
+  height: 240px;
+  top: -150px;
+  right: 12%;
+  border: 28px solid rgba(214,168,75,.14);
+}
+#finance-design-review .ldr-pane::after {
+  width: 190px;
+  height: 190px;
+  left: -112px;
+  bottom: 8%;
+  border: 22px solid rgba(18,55,42,.13);
+}
+#finance-design-review .ldr-pane > * { position: relative; z-index: 1; }
+#finance-design-review .ldr-pane-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: light-dark(#17211c, #edf4ef);
+}
+#finance-design-review .ldr-mobile-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+#finance-design-review .ldr-phone {
+  width: 100%;
+  max-width: 280px;
+  min-height: 570px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 7px solid #17211c;
+  border-radius: 28px;
+  background: #f6f4ee;
+  color: #17211c;
+  box-shadow: 0 8px 26px rgba(18,55,42,.16);
+}
+#finance-design-review .ldr-phone-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 10px 14px;
+  background: #12372a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+}
+#finance-design-review .ldr-phone-main {
+  position: relative;
+  isolation: isolate;
+  min-height: 511px;
+  padding: 14px;
+  background:
+    radial-gradient(circle at 108% -4%, rgba(214,168,75,.23) 0 72px, transparent 73px),
+    radial-gradient(circle at -18% 104%, rgba(18,55,42,.10) 0 92px, transparent 93px),
+    #f6f4ee;
+}
+#finance-design-review .ldr-phone-main::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 118px;
+  height: 118px;
+  top: 36%;
+  right: -82px;
+  border: 18px solid rgba(214,168,75,.10);
+  border-radius: 999px;
+  pointer-events: none;
+}
+#finance-design-review .ldr-phone-main > * { position: relative; z-index: 1; }
+#finance-design-review .ldr-eyebrow { margin: 0 0 4px; color: #526158; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+#finance-design-review .ldr-h1 { margin: 0 0 14px; font-size: 21px; line-height: 1.2; }
+#finance-design-review .ldr-balance {
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 1px solid #d9ded9;
+  border-radius: 14px;
+  background: #ffffff;
+}
+#finance-design-review .ldr-balance span { display: block; color: #526158; font-size: 12px; }
+#finance-design-review .ldr-balance strong { display: block; margin-top: 4px; font-size: 23px; }
+#finance-design-review .ldr-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+#finance-design-review .ldr-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 750;
+}
+#finance-design-review .ldr-action-in { background: #12372a; color: #ffffff; }
+#finance-design-review .ldr-action-out { background: #d6a84b; color: #17211c; }
+#finance-design-review .ldr-transaction {
+  padding: 11px 0;
+  border-bottom: 1px solid #d9ded9;
+}
+#finance-design-review .ldr-transaction-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; font-weight: 700; }
+#finance-design-review .ldr-meta { margin-top: 4px; color: #526158; font-size: 10px; }
+#finance-design-review .ldr-field-label { display: block; margin: 11px 0 5px; font-size: 11px; font-weight: 700; }
+#finance-design-review .ldr-input {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #aeb9b2;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #526158;
+  font-size: 12px;
+}
+#finance-design-review .ldr-input-area { align-items: flex-start; min-height: 72px; }
+#finance-design-review .ldr-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  margin-top: 15px;
+  border-radius: 10px;
+  background: #d6a84b;
+  color: #17211c;
+  font-size: 12px;
+  font-weight: 750;
+}
+#finance-design-review .ldr-detail-list {
+  border: 1px solid #d9ded9;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+#finance-design-review .ldr-detail-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 11px;
+  border-bottom: 1px solid #edf0ed;
+  font-size: 11px;
+}
+#finance-design-review .ldr-detail-line:last-child { border-bottom: 0; }
+#finance-design-review .ldr-detail-line span { color: #526158; }
+#finance-design-review .ldr-danger-zone {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #b42318;
+  border-radius: 12px;
+  background: #fdecea;
+}
+#finance-design-review .ldr-danger-zone strong { display: block; font-size: 12px; color: #7f1912; }
+#finance-design-review .ldr-danger-zone p { margin: 5px 0 9px; font-size: 10px; }
+#finance-design-review .ldr-danger-action {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: #b42318;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 750;
+}
+#finance-design-review .ldr-window {
+  overflow: hidden;
+  border: 1px solid #aeb9b2;
+  border-radius: 15px;
+  background: #f6f4ee;
+  color: #17211c;
+  box-shadow: 0 8px 24px rgba(18,55,42,.13);
+}
+#finance-design-review .ldr-window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 0 20px;
+  background: #12372a;
+  color: #ffffff;
+}
+#finance-design-review .ldr-window-body { display: grid; grid-template-columns: 190px 1fr; min-height: 540px; }
+#finance-design-review .ldr-sidebar { padding: 20px 14px; background: #ffffff; border-right: 1px solid #d9ded9; }
+#finance-design-review .ldr-navitem { padding: 10px 12px; margin-bottom: 5px; border-radius: 8px; font-size: 12px; }
+#finance-design-review .ldr-navitem-active { background: #e7eee9; color: #12372a; font-weight: 750; }
+#finance-design-review .ldr-desktop-main {
+  position: relative;
+  isolation: isolate;
+  padding: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 102% 0, rgba(214,168,75,.20) 0 150px, transparent 151px),
+    radial-gradient(circle at 4% 108%, rgba(18,55,42,.09) 0 180px, transparent 181px),
+    #f6f4ee;
+}
+#finance-design-review .ldr-desktop-main::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 250px;
+  height: 250px;
+  right: -150px;
+  bottom: 12%;
+  border: 34px solid rgba(18,55,42,.08);
+  border-radius: 999px;
+  pointer-events: none;
+}
+#finance-design-review .ldr-desktop-main::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 340px;
+  height: 74px;
+  top: 46px;
+  right: -92px;
+  border-radius: 999px;
+  background: rgba(214,168,75,.11);
+  transform: rotate(-28deg);
+  pointer-events: none;
+}
+#finance-design-review .ldr-desktop-main > * { position: relative; z-index: 1; }
+#finance-design-review .ldr-desktop-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; margin-bottom: 18px; }
+#finance-design-review .ldr-desktop-head h2 { margin: 2px 0; font-size: 24px; }
+#finance-design-review .ldr-desktop-actions { display: flex; gap: 8px; }
+#finance-design-review .ldr-desktop-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+#finance-design-review .ldr-metric { padding: 14px; border: 1px solid #d9ded9; border-radius: 12px; background: #ffffff; }
+#finance-design-review .ldr-metric small { color: #526158; }
+#finance-design-review .ldr-metric strong { display: block; margin-top: 5px; font-size: 18px; }
+#finance-design-review .ldr-desktop-table { width: 100%; border-collapse: collapse; background: #ffffff; font-size: 11px; }
+#finance-design-review .ldr-desktop-table th,
+#finance-design-review .ldr-desktop-table td { padding: 10px; border-bottom: 1px solid #e4e8e4; text-align: left; }
+#finance-design-review .ldr-desktop-table th { background: #eef2ef; font-weight: 750; }
+#finance-design-review .ldr-desktop-table .ldr-number { text-align: right; white-space: nowrap; }
+#finance-design-review .ldr-link { color: #12372a; font-weight: 700; text-decoration: underline; }
+#finance-design-review .ldr-a4-wrap { display: flex; justify-content: center; padding: 5px 0; }
+#finance-design-review .ldr-a4 {
+  width: min(100%, 610px);
+  aspect-ratio: 210 / 297;
+  padding: 6%;
+  background: #ffffff;
+  color: #161616;
+  box-shadow: 0 8px 28px rgba(0,0,0,.18);
+}
+#finance-design-review .ldr-a4 h2 { margin: 0; text-align: center; font-family: Arial, sans-serif; font-size: 18px; }
+#finance-design-review .ldr-a4-sub { margin: 5px 0 18px; text-align: center; color: #444; font-size: 10px; }
+#finance-design-review .ldr-a4-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+#finance-design-review .ldr-a4-summary div { padding: 8px; border: 1px solid #555; }
+#finance-design-review .ldr-a4-summary span { display: block; font-size: 7px; }
+#finance-design-review .ldr-a4-summary strong { display: block; margin-top: 3px; font-size: 9px; text-align: right; }
+#finance-design-review .ldr-a4-table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 7px; }
+#finance-design-review .ldr-a4-table th,
+#finance-design-review .ldr-a4-table td { padding: 6px 4px; border: 1px solid #555; vertical-align: top; }
+#finance-design-review .ldr-a4-table th { background: #e8e8e8; }
+#finance-design-review .ldr-a4-table .ldr-number { text-align: right; }
+#finance-design-review .ldr-a4-footer { margin-top: 14px; display: flex; justify-content: space-between; color: #444; font-size: 7px; }
+#finance-design-review .ldr-tv {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 8px solid #111713;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 91% 14%, rgba(214,168,75,.24) 0 10%, transparent 28%),
+    radial-gradient(circle at 8% 104%, rgba(214,168,75,.13) 0 12%, transparent 31%),
+    linear-gradient(135deg, #0b2b20, #12372a 58%, #245344);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+#finance-design-review .ldr-tv::before {
+  content: "";
+  position: absolute;
+  width: 36%;
+  aspect-ratio: 1;
+  right: -19%;
+  top: 31%;
+  border: clamp(12px, 2.2vw, 28px) solid rgba(255,255,255,.07);
+  border-radius: 999px;
+  pointer-events: none;
+}
+#finance-design-review .ldr-tv-safe {
+  position: absolute;
+  inset: 5%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+#finance-design-review .ldr-tv-header { display: flex; align-items: center; justify-content: space-between; font-size: clamp(10px, 1.4vw, 16px); }
+#finance-design-review .ldr-tv-title { align-self: center; text-align: center; }
+#finance-design-review .ldr-tv-title p { margin: 0 0 8px; color: #f2d897; font-size: clamp(12px, 2vw, 22px); font-weight: 650; }
+#finance-design-review .ldr-tv-title h2 { margin: 0; font-size: clamp(28px, 6vw, 66px); line-height: 1.05; }
+#finance-design-review .ldr-tv-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5%; margin-top: 5%; }
+#finance-design-review .ldr-tv-value { padding: 3%; border: 1px solid rgba(255,255,255,.45); border-radius: 12px; background: rgba(255,255,255,.08); }
+#finance-design-review .ldr-tv-value span { display: block; font-size: clamp(10px, 1.4vw, 16px); }
+#finance-design-review .ldr-tv-value strong { display: block; margin-top: 5%; font-size: clamp(16px, 2.7vw, 30px); }
+#finance-design-review .ldr-tv-footer { display: flex; justify-content: space-between; color: #dce8e1; font-size: clamp(9px, 1.2vw, 13px); }
+#finance-design-review .ldr-legend { margin: 13px 0 0; color: light-dark(#526158, #b8c8bd); font-size: 12px; }
+@media (max-width: 760px) {
+  #finance-design-review .ldr-pane { padding: 14px; }
+  #finance-design-review .ldr-mobile-row { grid-template-columns: 1fr; }
+  #finance-design-review .ldr-phone { max-width: 360px; }
+  #finance-design-review .ldr-window-body { grid-template-columns: 1fr; }
+  #finance-design-review .ldr-sidebar { display: none; }
+  #finance-design-review .ldr-desktop-main { padding: 14px; }
+  #finance-design-review .ldr-desktop-metrics { grid-template-columns: 1fr; }
+  #finance-design-review .ldr-desktop-table { min-width: 680px; }
+  #finance-design-review .ldr-window { overflow-x: auto; }
+}
+</style>
+
+<div id="finance-design-review">
+  <div class="ldr-tabs" role="tablist" aria-label="Pilih wireframe">
+    <button class="ldr-tab" type="button" role="tab" aria-selected="true" aria-controls="ldr-mobile-pane" id="ldr-mobile-tab" data-pane="ldr-mobile-pane">Mobile 360</button>
+    <button class="ldr-tab" type="button" role="tab" aria-selected="false" aria-controls="ldr-desktop-pane" id="ldr-desktop-tab" data-pane="ldr-desktop-pane">Desktop 1280</button>
+    <button class="ldr-tab" type="button" role="tab" aria-selected="false" aria-controls="ldr-pdf-pane" id="ldr-pdf-tab" data-pane="ldr-pdf-pane">PDF A4</button>
+    <button class="ldr-tab" type="button" role="tab" aria-selected="false" aria-controls="ldr-tv-pane" id="ldr-tv-tab" data-pane="ldr-tv-pane">TV 16:9</button>
+  </div>
+
+  <section class="ldr-pane" id="ldr-mobile-pane" role="tabpanel" aria-labelledby="ldr-mobile-tab">
+    <h2 class="ldr-pane-title">Alur inti Petugas pada lebar 360 piksel</h2>
+    <div class="ldr-mobile-row">
+      <div class="ldr-phone">
+        <div class="ldr-phone-top"><span>Laporan Masjid</span><span>Menu</span></div>
+        <div class="ldr-phone-main">
+          <p class="ldr-eyebrow">Dashboard · Aktif</p>
+          <h3 class="ldr-h1">Selamat datang, Siti</h3>
+          <div class="ldr-balance"><span>Saldo saat ini</span><strong>Rp 12.500.000</strong></div>
+          <div class="ldr-actions"><div class="ldr-action ldr-action-in">+ Uang Masuk</div><div class="ldr-action ldr-action-out">− Uang Keluar</div></div>
+          <p class="ldr-eyebrow">Transaksi terbaru</p>
+          <div class="ldr-transaction"><div class="ldr-transaction-head"><span>Infak Jumat</span><span>+ Rp 850.000</span></div><div class="ldr-meta">06/09/2026 · Uang Masuk</div></div>
+          <div class="ldr-transaction"><div class="ldr-transaction-head"><span>Perawatan pompa</span><span>− Rp 425.000</span></div><div class="ldr-meta">05/09/2026 · Perawatan</div></div>
+          <div class="ldr-transaction"><div class="ldr-transaction-head"><span>Konsumsi rapat</span><span>− Rp 180.000</span></div><div class="ldr-meta">04/09/2026 · Konsumsi</div></div>
+        </div>
+      </div>
+
+      <div class="ldr-phone">
+        <div class="ldr-phone-top"><span>Laporan Masjid</span><span>Tutup</span></div>
+        <div class="ldr-phone-main">
+          <p class="ldr-eyebrow">Transaksi baru</p>
+          <h3 class="ldr-h1">Uang Keluar</h3>
+          <span class="ldr-field-label">Tanggal</span><div class="ldr-input">07/09/2026</div>
+          <span class="ldr-field-label">Jumlah (Rupiah)</span><div class="ldr-input">Rp 250.000</div>
+          <span class="ldr-field-label">Keterangan</span><div class="ldr-input ldr-input-area">Pembelian alat kebersihan</div>
+          <span class="ldr-field-label">Kategori pengeluaran</span><div class="ldr-input">Perawatan ▾</div>
+          <span class="ldr-field-label">Bukti transaksi · opsional</span><div class="ldr-input">Pilih JPG, PNG, atau PDF</div>
+          <div class="ldr-submit">Simpan Uang Keluar</div>
+        </div>
+      </div>
+
+      <div class="ldr-phone">
+        <div class="ldr-phone-top"><span>Detail transaksi</span><span>Kembali</span></div>
+        <div class="ldr-phone-main">
+          <p class="ldr-eyebrow">TRX-202609-000021 · Aktif</p>
+          <h3 class="ldr-h1">Pembelian alat kebersihan</h3>
+          <div class="ldr-detail-list">
+            <div class="ldr-detail-line"><span>Tanggal</span><strong>07/09/2026</strong></div>
+            <div class="ldr-detail-line"><span>Jenis</span><strong>Uang Keluar</strong></div>
+            <div class="ldr-detail-line"><span>Jumlah</span><strong>Rp 250.000</strong></div>
+            <div class="ldr-detail-line"><span>Kategori</span><strong>Perawatan</strong></div>
+            <div class="ldr-detail-line"><span>Dibuat oleh</span><strong>Siti</strong></div>
+          </div>
+          <div class="ldr-actions" style="margin-top:12px"><div class="ldr-action ldr-action-in">Ubah</div><div class="ldr-action" style="border:1px solid #aeb9b2;background:#fff">Unduh bukti</div></div>
+          <div class="ldr-danger-zone"><strong>Batalkan transaksi</strong><p>Aksi ini tidak menghapus data. Alasan dan pelaku dicatat dalam audit.</p><div class="ldr-danger-action">Lanjutkan pembatalan</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="ldr-legend">Tombol Uang Masuk, Uang Keluar, Ubah, dan Batalkan hanya muncul jika izin Petugas mengizinkannya.</p>
+  </section>
+
+  <section class="ldr-pane" id="ldr-desktop-pane" role="tabpanel" aria-labelledby="ldr-desktop-tab" hidden>
+    <h2 class="ldr-pane-title">Dashboard dan daftar transaksi pada desktop</h2>
+    <div class="ldr-window">
+      <div class="ldr-window-bar"><strong>Laporan Keuangan</strong><span>Laporan Masjid ▾ &nbsp; · &nbsp; Siti</span></div>
+      <div class="ldr-window-body">
+        <aside class="ldr-sidebar">
+          <div class="ldr-navitem ldr-navitem-active">Dashboard</div>
+          <div class="ldr-navitem">Transaksi</div>
+          <div class="ldr-navitem">Laporan Periode</div>
+          <div class="ldr-navitem">PDF</div>
+          <div class="ldr-navitem">Pengaturan</div>
+        </aside>
+        <main class="ldr-desktop-main">
+          <div class="ldr-desktop-head">
+            <div><p class="ldr-eyebrow">Laporan Masjid · Aktif</p><h2>Dashboard</h2><span class="ldr-meta">01/01/2026 – tanpa tanggal selesai</span></div>
+            <div class="ldr-desktop-actions"><div class="ldr-action ldr-action-in" style="padding:0 16px">+ Uang Masuk</div><div class="ldr-action ldr-action-out" style="padding:0 16px">− Uang Keluar</div></div>
+          </div>
+          <div class="ldr-desktop-metrics">
+            <div class="ldr-metric"><small>Saldo saat ini</small><strong>Rp 12.500.000</strong></div>
+            <div class="ldr-metric"><small>Total Uang Masuk</small><strong>Rp 18.250.000</strong></div>
+            <div class="ldr-metric"><small>Total Uang Keluar</small><strong>Rp 5.750.000</strong></div>
+          </div>
+          <p class="ldr-eyebrow">Transaksi terbaru</p>
+          <table class="ldr-desktop-table">
+            <thead><tr><th>No</th><th>Tanggal</th><th>Keterangan</th><th class="ldr-number">Pengeluaran</th><th class="ldr-number">Pemasukan</th><th>Kategori</th><th>Aksi</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>06/09/2026</td><td>Infak Jumat</td><td class="ldr-number">—</td><td class="ldr-number">Rp 850.000</td><td>—</td><td><span class="ldr-link">Detail</span></td></tr>
+              <tr><td>2</td><td>05/09/2026</td><td>Perawatan pompa air</td><td class="ldr-number">Rp 425.000</td><td class="ldr-number">—</td><td>Perawatan</td><td><span class="ldr-link">Detail</span></td></tr>
+              <tr><td>3</td><td>04/09/2026</td><td>Konsumsi rapat pengurus</td><td class="ldr-number">Rp 180.000</td><td class="ldr-number">—</td><td>Konsumsi</td><td><span class="ldr-link">Detail</span></td></tr>
+            </tbody>
+          </table>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <section class="ldr-pane" id="ldr-pdf-pane" role="tabpanel" aria-labelledby="ldr-pdf-tab" hidden>
+    <h2 class="ldr-pane-title">Struktur PDF A4 portrait</h2>
+    <div class="ldr-a4-wrap">
+      <article class="ldr-a4">
+        <h2>Laporan Keuangan Masjid</h2>
+        <p class="ldr-a4-sub">Periode 01 Agustus 2026 – 31 Agustus 2026</p>
+        <div class="ldr-a4-summary">
+          <div><span>Saldo sebelum periode</span><strong>Rp 9.500.000</strong></div>
+          <div><span>Uang Masuk</span><strong>Rp 4.250.000</strong></div>
+          <div><span>Uang Keluar</span><strong>Rp 1.250.000</strong></div>
+          <div><span>Saldo akhir</span><strong>Rp 12.500.000</strong></div>
+        </div>
+        <table class="ldr-a4-table">
+          <thead><tr><th>No</th><th>Tanggal</th><th>Keterangan</th><th>Pengeluaran</th><th>Pemasukan</th><th>Kategori</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>02/08/2026</td><td>Infak Jumat pekan pertama</td><td class="ldr-number">—</td><td class="ldr-number">Rp 850.000</td><td>—</td></tr>
+            <tr><td>2</td><td>05/08/2026</td><td>Pembelian perlengkapan dan alat kebersihan</td><td class="ldr-number">Rp 250.000</td><td class="ldr-number">—</td><td>Perawatan</td></tr>
+            <tr><td>3</td><td>09/08/2026</td><td>Donasi kegiatan sosial</td><td class="ldr-number">—</td><td class="ldr-number">Rp 1.500.000</td><td>—</td></tr>
+            <tr><td>4</td><td>11/08/2026</td><td>Konsumsi rapat pengurus</td><td class="ldr-number">Rp 180.000</td><td class="ldr-number">—</td><td>Konsumsi</td></tr>
+            <tr><td>5</td><td>16/08/2026</td><td>Infak Jumat pekan ketiga</td><td class="ldr-number">—</td><td class="ldr-number">Rp 900.000</td><td>—</td></tr>
+            <tr><td>6</td><td>20/08/2026</td><td>Perawatan pompa air dan penggantian komponen</td><td class="ldr-number">Rp 425.000</td><td class="ldr-number">—</td><td>Perawatan</td></tr>
+          </tbody>
+        </table>
+        <div class="ldr-a4-footer"><span>Dicetak oleh Admin Laporan</span><span>Halaman 1 dari 3</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="ldr-pane" id="ldr-tv-pane" role="tabpanel" aria-labelledby="ldr-tv-tab" hidden>
+    <h2 class="ldr-pane-title">Slide ringkasan pada safe area 16:9</h2>
+    <div class="ldr-tv">
+      <div class="ldr-tv-safe">
+        <header class="ldr-tv-header"><strong>Laporan Masjid</strong><span>Ringkasan · 2/6</span></header>
+        <div class="ldr-tv-title">
+          <p>Periode Januari – September 2026</p>
+          <h2>Ringkasan Keuangan</h2>
+          <div class="ldr-tv-values">
+            <div class="ldr-tv-value"><span>Uang Masuk</span><strong>Rp 18,25 jt</strong></div>
+            <div class="ldr-tv-value"><span>Uang Keluar</span><strong>Rp 5,75 jt</strong></div>
+            <div class="ldr-tv-value"><span>Saldo</span><strong>Rp 12,50 jt</strong></div>
+          </div>
+        </div>
+        <footer class="ldr-tv-footer"><span>Transparansi untuk jamaah</span><span>Diperbarui 07/09/2026 · 08.30</span></footer>
+      </div>
+    </div>
+    <p class="ldr-legend">Slide lain mengikuti pola yang sama: pembuka, kategori, perbandingan bulanan, transaksi terbaru opsional, dan penutup.</p>
+  </section>
+</div>
+
+<script>
+(() => {
+  const root = document.getElementById('finance-design-review');
+  const tabs = [...root.querySelectorAll('.ldr-tab')];
+  const panes = [...root.querySelectorAll('.ldr-pane')];
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((item) => item.setAttribute('aria-selected', String(item === tab)));
+      panes.forEach((pane) => { pane.hidden = pane.id !== tab.dataset.pane; });
+    });
+  });
+})();
+</script>

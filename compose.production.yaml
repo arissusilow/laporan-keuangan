@@ -1,0 +1,21 @@
+services:
+  db:
+    ports: []
+  app:
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      SESSION_SECURE_COOKIE: "true"
+  worker:
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      SESSION_SECURE_COOKIE: "true"
+  scheduler:
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      SESSION_SECURE_COOKIE: "true"
+  web:
+    ports:
+      - "127.0.0.1:${APP_PORT:-8181}:80"

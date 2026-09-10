@@ -1,0 +1,11 @@
+.git
+.env
+apps/web/.env
+apps/web/vendor
+apps/web/node_modules
+apps/web/storage/logs
+apps/web/storage/app/private
+backups
+docs
+*.dump
+*.log

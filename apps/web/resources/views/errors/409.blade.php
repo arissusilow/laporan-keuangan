@@ -1,0 +1,1 @@
+@extends('layouts.app') @section('title','Laporan baca-saja') @section('content')<div class="card empty"><h1>Laporan tidak dapat diubah</h1><p class="muted">Laporan ditutup/diarsipkan atau transaksi sudah dibatalkan.</p><a class="btn btn-primary" href="{{ route('reports.index') }}">Pilih Laporan</a></div>@endsection

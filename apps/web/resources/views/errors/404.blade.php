@@ -1,0 +1,1 @@
+@extends('layouts.app') @section('title','Tidak ditemukan') @section('content')<div class="card empty"><h1>Halaman tidak ditemukan</h1><p class="muted">Data mungkin tidak tersedia, dipindahkan, atau slide telah dinonaktifkan.</p><a class="btn btn-primary" href="{{ url('/') }}">Kembali</a></div>@endsection
