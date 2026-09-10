@@ -488,26 +488,16 @@ textarea.input { min-height: 106px; resize: vertical; }
 
 .finance-pagination { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e6e3; }
 .finance-pagination p { margin: 0; color: #526158; font-size: .82rem; }
-.transaction-browser { padding: 0; overflow: visible; }
-.period-navigator { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: .5rem; padding: 1rem 1.15rem .8rem; border-radius: 16px 16px 0 0; background: linear-gradient(135deg, #12372a, #1b513e); color: #fff; }
+.transaction-browser { padding: 0; overflow: hidden; }
+.period-navigator { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: .5rem; padding: 1rem 1.15rem .8rem; background: linear-gradient(135deg, #12372a, #1b513e); color: #fff; }
 .period-navigator > div { display: grid; min-width: 0; text-align: center; }
 .period-navigator span { color: rgba(255,255,255,.7); font-size: .7rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
 .period-navigator strong { overflow: hidden; font-size: 1rem; text-overflow: ellipsis; white-space: nowrap; }
-.period-navigator a { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; color: #fff; font-size: 1.65rem; text-decoration: none; }
-.period-navigator a:hover, .period-navigator a:focus-visible { background: rgba(255,255,255,.14); outline: none; }
-.period-picker { position: relative; min-width: 0; }
-.period-picker summary { display: grid; grid-template-columns: 1fr auto; min-height: 44px; align-content: center; column-gap: .4rem; padding: .2rem .6rem; border-radius: 10px; cursor: pointer; list-style: none; text-align: center; }
-.period-picker summary::-webkit-details-marker { display: none; }
-.period-picker summary span { grid-column: 1 / -1; }
-.period-picker summary strong { justify-self: end; }
-.period-picker summary small { align-self: center; color: #d6a84b; font-size: 1rem; transition: transform .18s ease; }
-.period-picker[open] summary, .period-picker summary:hover, .period-picker summary:focus-visible { background: rgba(255,255,255,.12); outline: none; }
-.period-picker[open] summary small { transform: rotate(180deg); }
-.period-picker-popover { position: absolute; z-index: 20; top: calc(100% + .55rem); left: 50%; width: min(310px, calc(100vw - 2rem)); padding: .8rem; border: 1px solid #d9ded9; border-radius: 14px; background: #fff; box-shadow: 0 18px 45px rgba(6,31,22,.24); color: #17221c; transform: translateX(-50%); }
-.period-picker-popover form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .6rem; text-align: left; }
-.period-picker-popover label { grid-column: 1 / -1; color: #526158; font-size: .72rem; font-weight: 700; }
-.period-picker-popover .input { min-width: 0; }
-.period-picker-popover .btn { min-height: 44px; }
+.period-navigator > a { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; color: #fff; font-size: 1.65rem; text-decoration: none; }
+.period-navigator > a:hover, .period-navigator > a:focus-visible { background: rgba(255,255,255,.14); outline: none; }
+.period-picker-trigger { display: grid; min-width: 0; color: inherit; cursor: pointer; text-decoration: none; }
+.period-picker-trigger:focus-visible { border-radius: 4px; outline: 2px solid #d6a84b; outline-offset: 3px; }
+.period-picker-modal { width: min(100%, 430px); }
 .period-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #12372a; }
 .period-tabs a { position: relative; min-width: 0; padding: .75rem .45rem; color: rgba(255,255,255,.72); font-size: .8rem; font-weight: 700; text-align: center; text-decoration: none; }
 .period-tabs a::after { position: absolute; right: 20%; bottom: 0; left: 20%; height: 3px; border-radius: 4px 4px 0 0; background: transparent; content: ""; }
@@ -689,10 +679,6 @@ textarea.input { min-height: 106px; resize: vertical; }
     .finance-pagination { align-items: stretch; flex-direction: column; }
     .finance-pagination p { text-align: center; }
     .period-navigator { padding: .8rem; }
-    .period-picker summary { padding-inline: .25rem; }
-    .period-picker-popover { position: fixed; top: auto; bottom: 1rem; width: calc(100vw - 2rem); max-width: 380px; }
-    .period-picker-popover form { grid-template-columns: 1fr; }
-    .period-picker-popover label { grid-column: auto; }
     .period-tabs a { padding: .7rem .2rem; font-size: .72rem; }
     .period-summary > div { padding: .8rem .35rem; }
     .period-summary span { font-size: .7rem; }

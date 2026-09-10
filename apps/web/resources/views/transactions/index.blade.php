@@ -16,20 +16,7 @@
         @if($periodMode === 'year')
             <div><span>Periode</span><strong>{{ $periodLabel }}</strong></div>
         @else
-            <details class="period-picker">
-                <summary aria-label="Pilih bulan dan tahun"><span>Periode</span><strong>{{ $periodLabel }}</strong><small aria-hidden="true">⌄</small></summary>
-                <div class="period-picker-popover">
-                    <form method="get" action="{{ route('transactions.index', $report) }}">
-                        <input type="hidden" name="view" value="{{ $periodMode }}">
-                        @foreach(['type', 'category', 'q', 'sort'] as $filterName)
-                            @if(filled($filters[$filterName] ?? null))<input type="hidden" name="{{ $filterName }}" value="{{ $filters[$filterName] }}">@endif
-                        @endforeach
-                        <label for="period-shortcut">Pilih bulan dan tahun</label>
-                        <input class="input" id="period-shortcut" type="month" name="period" value="{{ $periodAnchor->format('Y-m') }}" min="1900-01" max="2100-12" required>
-                        <button class="btn btn-primary" type="submit">Tampilkan</button>
-                    </form>
-                </div>
-            </details>
+            <div><a class="period-picker-trigger" href="#period-shortcut" aria-label="Pilih bulan dan tahun"><span>Periode</span><strong>{{ $periodLabel }}</strong></a></div>
         @endif
         @if($nextPeriodUrl)<a href="{{ $nextPeriodUrl }}" aria-label="Periode berikutnya">›</a>@else<span class="period-arrow-placeholder" aria-hidden="true"></span>@endif
     </div>
@@ -44,6 +31,23 @@
         <div><span>Saldo</span><strong class="{{ $periodBalance < 0 ? 'money-out' : '' }}">Rp {{ number_format($periodBalance, 0, ',', '.') }}</strong></div>
     </div>
 </section>
+
+@if($periodMode !== 'year')
+    <div class="modal-shell" id="period-shortcut" role="dialog" aria-modal="true" aria-labelledby="period-shortcut-title">
+        <a class="modal-backdrop" href="{{ request()->fullUrl() }}" aria-label="Tutup popup"></a>
+        <section class="modal-card period-picker-modal">
+            <div class="modal-header"><div><p class="eyebrow">Shortcut periode</p><h2 id="period-shortcut-title">Pilih bulan dan tahun</h2></div><a class="modal-close" href="{{ request()->fullUrl() }}" aria-label="Tutup">×</a></div>
+            <form method="get" action="{{ route('transactions.index', $report) }}">
+                <input type="hidden" name="view" value="{{ $periodMode }}">
+                @foreach(['type', 'category', 'q', 'sort'] as $filterName)
+                    @if(filled($filters[$filterName] ?? null))<input type="hidden" name="{{ $filterName }}" value="{{ $filters[$filterName] }}">@endif
+                @endforeach
+                <div class="field"><label for="period-shortcut-input">Bulan dan tahun</label><input class="input" id="period-shortcut-input" type="month" name="period" value="{{ $periodAnchor->format('Y-m') }}" min="1900-01" max="2100-12" required></div>
+                <div class="modal-actions"><a class="btn btn-secondary" href="{{ request()->fullUrl() }}">Batal</a><button class="btn btn-primary" type="submit">Tampilkan</button></div>
+            </form>
+        </section>
+    </div>
+@endif
 
 <form class="card transaction-filters no-print" method="get">
     <input type="hidden" name="view" value="{{ $periodMode }}">
