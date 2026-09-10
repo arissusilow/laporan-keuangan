@@ -7,6 +7,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReportRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $openingBalance = $this->input('opening_balance');
+
+        if (is_string($openingBalance) && preg_match('/^-?\d+(?:\.\d{3})*$/', trim($openingBalance)) === 1) {
+            $this->merge(['opening_balance' => str_replace('.', '', trim($openingBalance))]);
+        }
+    }
+
     public function authorize(): bool
     {
         $report = $this->route('report');

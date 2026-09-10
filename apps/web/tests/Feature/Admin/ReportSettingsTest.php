@@ -29,8 +29,8 @@ class ReportSettingsTest extends TestCase
             'description' => null,
             'starts_on' => null,
             'ends_on' => null,
-            'opening_balance' => $report->opening_balance,
-            'opening_balance_reason' => null,
+            'opening_balance' => '-1.500.000',
+            'opening_balance_reason' => 'Koreksi saldo awal pengujian',
             'status' => 'ARCHIVED',
             'color' => '#12372A',
         ])->assertSessionHasNoErrors();
@@ -39,6 +39,7 @@ class ReportSettingsTest extends TestCase
             'id' => $report->id,
             'name' => 'Laporan Uji Diperbarui',
             'status' => 'ARCHIVED',
+            'opening_balance' => -1500000,
         ]);
     }
 

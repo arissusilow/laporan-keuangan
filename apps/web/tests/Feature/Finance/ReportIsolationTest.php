@@ -43,6 +43,8 @@ class ReportIsolationTest extends TestCase
         $this->actingAs($user)->get(route('reports.create'))
             ->assertOk()
             ->assertSee('Nama Laporan')
+            ->assertSee('data-rupiah-input', false)
+            ->assertSee('data-rupiah-signed', false)
             ->assertDontSee("@include('reports.partials.fields", false);
 
         $this->actingAs($user)->post(route('reports.store'), [
@@ -50,11 +52,12 @@ class ReportIsolationTest extends TestCase
             'description' => 'Pencatatan operasional utama',
             'starts_on' => '2026-09-01',
             'ends_on' => null,
-            'opening_balance' => 250000,
+            'opening_balance' => '250.000',
             'color' => '#12372A',
         ])->assertRedirect();
 
         $report = ReportSession::query()->where('name', 'Dana Operasional')->firstOrFail();
+        $this->assertSame(250000, $report->opening_balance);
         $this->assertDatabaseHas('report_session_members', [
             'report_session_id' => $report->id,
             'user_id' => $user->id,

@@ -199,15 +199,17 @@ document.querySelectorAll('[data-rupiah-input]').forEach((input) => {
     function formatRupiah() {
         const currentValue = input.value;
         const cursorPosition = input.selectionStart ?? currentValue.length;
+        const isNegative = input.hasAttribute('data-rupiah-signed') && currentValue.charAt(0) === '-';
         const digitsBeforeCursor = currentValue.slice(0, cursorPosition).replace(/\D/g, '').length;
         const digits = currentValue.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
-        const formatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        const unsignedFormatted = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        const formatted = isNegative ? `-${unsignedFormatted}` : unsignedFormatted;
 
         input.value = formatted;
 
         if (document.activeElement !== input || typeof input.setSelectionRange !== 'function') return;
 
-        let nextCursor = digitsBeforeCursor === 0 ? 0 : formatted.length;
+        let nextCursor = digitsBeforeCursor === 0 ? (isNegative ? Math.min(cursorPosition, 1) : 0) : formatted.length;
         if (digitsBeforeCursor > 0 && digitsBeforeCursor < digits.length) {
             let seenDigits = 0;
             for (let index = 0; index < formatted.length; index += 1) {
