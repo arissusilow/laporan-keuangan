@@ -19,5 +19,5 @@ services:
       APP_DEBUG: "false"
       SESSION_SECURE_COOKIE: "true"
   web:
-    ports:
+    ports: !override
       - "127.0.0.1:${APP_PORT:-8181}:80"
