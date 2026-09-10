@@ -235,6 +235,7 @@ class TransactionRulesTest extends TestCase
     public function test_transaction_period_tabs_filter_data_and_provide_previous_and_next_navigation(): void
     {
         [$user, $report] = $this->officerWithTransactionAccess();
+        $report->update(['opening_balance' => 100000]);
         $incomeCategory = ExpenseCategory::factory()->incoming()->for($report, 'report')->create();
         FinancialTransaction::factory()->for($report, 'report')->for($user, 'creator')->create([
             'expense_category_id' => $incomeCategory->id,
@@ -263,6 +264,8 @@ class TransactionRulesTest extends TestCase
             ->assertSee('Agustus')
             ->assertSee('Rp 500.000')
             ->assertSee('Rp 250.000')
+            ->assertSee('Saldo akhir')
+            ->assertSee('>Rp 850.000</strong>', false)
             ->assertSee('view=month&amp;period=2025-01-01', false)
             ->assertSee('view=month&amp;period=2027-01-01', false);
 
@@ -281,6 +284,7 @@ class TransactionRulesTest extends TestCase
             ->assertSee('value="2026-09"', false)
             ->assertSee('Pemasukan September')
             ->assertDontSee('Pemasukan Agustus')
+            ->assertSee('>Rp 850.000</strong>', false)
             ->assertSee('view=day&amp;period=2026-08-01', false)
             ->assertSee('view=day&amp;period=2026-10-01', false);
 
@@ -291,6 +295,7 @@ class TransactionRulesTest extends TestCase
         ]))->assertOk()
             ->assertSee('Agustus 2026')
             ->assertSee('Pemasukan Agustus')
+            ->assertSee('>Rp 350.000</strong>', false)
             ->assertDontSee('Pemasukan September');
 
         $this->actingAs($user)->get(route('transactions.index', [
@@ -299,6 +304,7 @@ class TransactionRulesTest extends TestCase
             'period' => '2026-09-08',
         ]))->assertOk()
             ->assertSee('Ringkasan mingguan')
+            ->assertSee('>Rp 850.000</strong>', false)
             ->assertSee('Minggu 2')
             ->assertSee('06.09 – 12.09');
 
@@ -308,6 +314,7 @@ class TransactionRulesTest extends TestCase
             'period' => '2026-01-01',
         ]))->assertOk()
             ->assertSee('Ringkasan tahunan')
+            ->assertSee('>Rp 850.000</strong>', false)
             ->assertSee('Total')
             ->assertSee('2026')
             ->assertSee('Rp 750.000');

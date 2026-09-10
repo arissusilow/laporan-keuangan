@@ -28,7 +28,7 @@
     <div class="period-summary" aria-label="Ringkasan periode">
         <div><span>Pemasukan</span><strong class="money-in">Rp {{ number_format($totals['incoming'], 0, ',', '.') }}</strong></div>
         <div><span>Pengeluaran</span><strong class="money-out">Rp {{ number_format($totals['outgoing'], 0, ',', '.') }}</strong></div>
-        <div><span>Saldo</span><strong class="{{ $periodBalance < 0 ? 'money-out' : '' }}">Rp {{ number_format($periodBalance, 0, ',', '.') }}</strong></div>
+        <div><span>Saldo akhir</span><strong class="{{ $periodBalance < 0 ? 'money-out' : '' }}">Rp {{ number_format($periodBalance, 0, ',', '.') }}</strong></div>
     </div>
 </section>
 

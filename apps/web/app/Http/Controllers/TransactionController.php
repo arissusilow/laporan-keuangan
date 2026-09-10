@@ -7,6 +7,7 @@ use App\Models\Attachment;
 use App\Models\AuditLog;
 use App\Models\FinancialTransaction;
 use App\Models\ReportSession;
+use App\Services\BalanceService;
 use App\Services\TransactionBrowserService;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
@@ -18,7 +19,7 @@ use Illuminate\View\View;
 
 class TransactionController extends Controller
 {
-    public function index(Request $request, ReportSession $report, TransactionBrowserService $browser): View
+    public function index(Request $request, ReportSession $report, TransactionBrowserService $browser, BalanceService $balances): View
     {
         Gate::authorize('view', $report);
         $filters = $request->validate([
@@ -70,7 +71,7 @@ class TransactionController extends Controller
         $result = $browser->build($report, $filters, $periodMode, $periodAnchor, max(1, $request->integer('page', 1)), $request->url(), $request->query());
         $breakdown = $result['breakdown'];
         $totals = $result['totals'];
-        $periodBalance = $totals['net'];
+        $periodBalance = $balances->balance($report, $periodEnd?->toDateString());
         $breakdownTransactionCount = $result['transaction_count'];
         $categories = $report->categories()->orderBy('sort_order')->get();
 
