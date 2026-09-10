@@ -13,7 +13,24 @@
 <section class="card transaction-browser no-print" aria-label="Navigasi periode transaksi">
     <div class="period-navigator">
         @if($previousPeriodUrl)<a href="{{ $previousPeriodUrl }}" aria-label="Periode sebelumnya">‹</a>@else<span class="period-arrow-placeholder" aria-hidden="true"></span>@endif
-        <div><span>Periode</span><strong>{{ $periodLabel }}</strong></div>
+        @if($periodMode === 'year')
+            <div><span>Periode</span><strong>{{ $periodLabel }}</strong></div>
+        @else
+            <details class="period-picker">
+                <summary aria-label="Pilih bulan dan tahun"><span>Periode</span><strong>{{ $periodLabel }}</strong><small aria-hidden="true">⌄</small></summary>
+                <div class="period-picker-popover">
+                    <form method="get" action="{{ route('transactions.index', $report) }}">
+                        <input type="hidden" name="view" value="{{ $periodMode }}">
+                        @foreach(['type', 'category', 'q', 'sort'] as $filterName)
+                            @if(filled($filters[$filterName] ?? null))<input type="hidden" name="{{ $filterName }}" value="{{ $filters[$filterName] }}">@endif
+                        @endforeach
+                        <label for="period-shortcut">Pilih bulan dan tahun</label>
+                        <input class="input" id="period-shortcut" type="month" name="period" value="{{ $periodAnchor->format('Y-m') }}" min="1900-01" max="2100-12" required>
+                        <button class="btn btn-primary" type="submit">Tampilkan</button>
+                    </form>
+                </div>
+            </details>
+        @endif
         @if($nextPeriodUrl)<a href="{{ $nextPeriodUrl }}" aria-label="Periode berikutnya">›</a>@else<span class="period-arrow-placeholder" aria-hidden="true"></span>@endif
     </div>
     <nav class="period-tabs" aria-label="Rentang transaksi">

@@ -272,10 +272,22 @@ class TransactionRulesTest extends TestCase
             'period' => '2026-09-08',
         ]))->assertOk()
             ->assertSee('September 2026')
+            ->assertSee('aria-label="Pilih bulan dan tahun"', false)
+            ->assertSee('type="month"', false)
+            ->assertSee('value="2026-09"', false)
             ->assertSee('Pemasukan September')
             ->assertDontSee('Pemasukan Agustus')
             ->assertSee('view=day&amp;period=2026-08-01', false)
             ->assertSee('view=day&amp;period=2026-10-01', false);
+
+        $this->actingAs($user)->get(route('transactions.index', [
+            'report' => $report,
+            'view' => 'day',
+            'period' => '2026-08',
+        ]))->assertOk()
+            ->assertSee('Agustus 2026')
+            ->assertSee('Pemasukan Agustus')
+            ->assertDontSee('Pemasukan September');
 
         $this->actingAs($user)->get(route('transactions.index', [
             'report' => $report,
