@@ -41,4 +41,14 @@ class UpdateReportRequest extends FormRequest
             'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ];
     }
+
+    /** @return array<string, string> */
+    public function messages(): array
+    {
+        return [
+            'opening_balance_reason.required' => 'Alasan perubahan saldo awal wajib diisi ketika saldo awal diubah.',
+            'opening_balance_reason.min' => 'Alasan perubahan saldo awal minimal 5 karakter.',
+            'opening_balance_reason.max' => 'Alasan perubahan saldo awal maksimal 500 karakter.',
+        ];
+    }
 }

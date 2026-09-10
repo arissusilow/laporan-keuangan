@@ -234,6 +234,30 @@ document.querySelectorAll('[data-rupiah-input]').forEach((input) => {
     formatRupiah();
 });
 
+document.querySelectorAll('[data-opening-balance-initial]').forEach((balanceInput) => {
+    const form = balanceInput.closest('form');
+    const reasonInput = form?.querySelector('[data-opening-balance-reason]');
+    const state = form?.querySelector('[data-opening-balance-reason-state]');
+    if (! reasonInput) return;
+
+    function normalizeBalance(value) {
+        const text = String(value || '0').trim();
+        const digits = text.replace(/\D/g, '') || '0';
+        return text.startsWith('-') ? `-${digits}` : digits;
+    }
+
+    const initialBalance = normalizeBalance(balanceInput.dataset.openingBalanceInitial);
+    function syncOpeningBalanceReason() {
+        const currentBalance = normalizeBalance(balanceInput.value);
+        const changed = currentBalance !== initialBalance;
+        reasonInput.required = changed;
+        if (state) state.textContent = changed ? 'wajib diisi sekarang' : 'wajib bila saldo berubah';
+    }
+
+    balanceInput.addEventListener('input', syncOpeningBalanceReason);
+    syncOpeningBalanceReason();
+});
+
 document.querySelectorAll('[data-month-picker-button]').forEach((button) => {
     const control = button.closest('.month-picker-control');
     const input = control?.querySelector('[data-month-picker-input]');

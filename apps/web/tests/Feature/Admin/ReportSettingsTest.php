@@ -43,6 +43,26 @@ class ReportSettingsTest extends TestCase
         ]);
     }
 
+    public function test_changing_opening_balance_requires_a_clear_indonesian_reason(): void
+    {
+        $admin = User::factory()->create();
+        $report = ReportSession::factory()->create(['opening_balance' => 100000]);
+        ReportSessionMember::factory()->admin()->for($report, 'report')->for($admin)->create();
+
+        $this->actingAs($admin)->put(route('reports.update', $report), [
+            'name' => $report->name,
+            'description' => $report->description,
+            'starts_on' => $report->starts_on?->format('Y-m-d'),
+            'ends_on' => $report->ends_on?->format('Y-m-d'),
+            'opening_balance' => '300.000',
+            'opening_balance_reason' => '',
+            'status' => $report->status,
+            'color' => $report->color,
+        ])->assertSessionHasErrors([
+            'opening_balance_reason' => 'Alasan perubahan saldo awal wajib diisi ketika saldo awal diubah.',
+        ]);
+    }
+
     public function test_settings_shows_registered_users_as_email_autocomplete_options(): void
     {
         $admin = User::factory()->create();

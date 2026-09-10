@@ -40,7 +40,7 @@
         <div class="section-heading"><div><h2>Identitas dan saldo awal</h2><p class="muted">Perubahan saldo awal wajib disertai alasan dan masuk audit.</p></div></div>
         @include('reports.partials.fields', ['report' => $report])
         <div class="field"><label for="status">Status</label><select class="input" id="status" name="status"><option value="ACTIVE" @selected($report->status === 'ACTIVE')>Aktif</option><option value="CLOSED" @selected($report->status === 'CLOSED')>Ditutup</option><option value="ARCHIVED" @selected($report->status === 'ARCHIVED')>Diarsipkan</option></select></div>
-        <div class="field"><label for="opening_balance_reason">Alasan perubahan saldo awal <span class="optional">wajib bila saldo berubah</span></label><textarea class="input" id="opening_balance_reason" name="opening_balance_reason">{{ old('opening_balance_reason') }}</textarea></div>
+        <div class="field"><label for="opening_balance_reason">Alasan perubahan saldo awal <span class="optional" data-opening-balance-reason-state>wajib bila saldo berubah</span></label><textarea class="input" id="opening_balance_reason" name="opening_balance_reason" minlength="5" maxlength="500" aria-describedby="opening-balance-reason-help" data-opening-balance-reason>{{ old('opening_balance_reason') }}</textarea><small class="field-help" id="opening-balance-reason-help">Isi minimal 5 karakter saat nominal saldo awal diubah, misalnya: Koreksi saldo awal.</small></div>
         <div class="form-actions"><button class="btn btn-primary" type="submit">Simpan Laporan</button></div>
     </form>
 @elseif($tab === 'pdf')
