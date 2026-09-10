@@ -1,6 +1,6 @@
 # Laporan Keuangan
 
-Status saat ini: **Prompt 4 — integrasi produk selesai dan menunggu evaluasi**. Aplikasi memakai Laravel 13, PostgreSQL 17, Blade, Tailwind CSS, Poppins lokal, database queue, Dompdf, Nginx, worker, dan scheduler. Seluruh layar utama memakai database serta policy nyata; Prompt 5 belum dimulai.
+Status saat ini: **Prompt 4 disetujui dan deployment produksi aktif**. Aplikasi memakai Laravel 13, PostgreSQL 17, Blade, Tailwind CSS, Poppins lokal, database queue, Dompdf, Nginx, worker, dan scheduler. Seluruh layar utama memakai database serta policy nyata; Prompt 5 belum dimulai.
 
 ## Menjalankan dengan Docker
 
@@ -10,6 +10,8 @@ cp .env.example .env
 docker compose up -d --build
 docker compose exec -T app php artisan migrate --force
 ```
+
+Image `laporan-keuangan-app:local` dibuat langsung dari source dan tidak diambil dari Docker Hub. Konfigurasi Compose melarang proses pull untuk image lokal tersebut, sehingga perintah di atas tidak memerlukan `docker login`. Image dasar publik seperti PostgreSQL, PHP, Composer, Node, dan Nginx tetap diunduh secara anonim dari Docker Hub.
 
 Buka [http://localhost:8181](http://localhost:8181). Endpoint pemeriksaan tersedia di [http://localhost:8181/health](http://localhost:8181/health).
 

@@ -21,6 +21,8 @@ services:
     networks: [backend]
 
   app:
+    image: laporan-keuangan-app:local
+    pull_policy: never
     build:
       context: .
       dockerfile: infrastructure/docker/Dockerfile
@@ -45,7 +47,8 @@ services:
     networks: [frontend, backend]
 
   worker:
-    image: laporan-keuangan-app
+    image: laporan-keuangan-app:local
+    pull_policy: never
     restart: unless-stopped
     env_file: .env
     command: ["php", "artisan", "queue:work", "--sleep=2", "--tries=3", "--timeout=600"]
@@ -58,7 +61,8 @@ services:
     networks: [backend]
 
   scheduler:
-    image: laporan-keuangan-app
+    image: laporan-keuangan-app:local
+    pull_policy: never
     restart: unless-stopped
     env_file: .env
     command: ["php", "artisan", "schedule:work"]
