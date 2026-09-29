@@ -270,7 +270,7 @@ class AdminController extends Controller
 
         DB::transaction(function () use ($request, $report, $config, $settings, $plainToken): void {
             $before = $config->toArray();
-            $config->update($request->safe()->only(['starts_on', 'ends_on', 'duration_seconds', 'refresh_seconds']) + [
+            $config->update($request->safe()->only(['starts_on', 'ends_on', 'duration_seconds', 'refresh_seconds', 'public_alias']) + [
                 'enabled' => $request->boolean('enabled'),
                 'show_latest_transactions' => $request->boolean('show_latest_transactions'),
                 'settings' => $settings,

@@ -10,7 +10,7 @@ class SlideConfig extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['report_session_id', 'enabled', 'token_hash', 'public_token', 'starts_on', 'ends_on', 'duration_seconds', 'refresh_seconds', 'show_latest_transactions', 'settings'];
+    protected $fillable = ['report_session_id', 'enabled', 'token_hash', 'public_token', 'public_alias', 'starts_on', 'ends_on', 'duration_seconds', 'refresh_seconds', 'show_latest_transactions', 'settings'];
 
     protected $hidden = ['token_hash', 'public_token'];
 

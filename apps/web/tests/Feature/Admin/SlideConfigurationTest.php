@@ -99,6 +99,117 @@ class SlideConfigurationTest extends TestCase
             ->assertSee('slide-controls', false);
     }
 
+    public function test_report_admin_can_save_a_normalized_slide_alias(): void
+    {
+        $admin = User::factory()->create();
+        $report = ReportSession::factory()->create();
+        ReportSessionMember::factory()->admin()->for($report, 'report')->for($admin)->create();
+        $report->slideConfig()->create();
+
+        $this->actingAs($admin)->put(route('slides.update', $report), [
+            'enabled' => 1,
+            'public_alias' => ' /SLIDE_MASJID ',
+            'duration_seconds' => 12,
+            'refresh_seconds' => 60,
+            'background_opacity' => 14,
+        ])->assertSessionHas('success', 'Pengaturan slide disimpan.');
+
+        $this->assertDatabaseHas('slide_configs', [
+            'report_session_id' => $report->id,
+            'public_alias' => 'slide_masjid',
+        ]);
+    }
+
+    public function test_enabled_slide_alias_redirects_to_the_original_public_token_url_without_login(): void
+    {
+        config()->set('app.public_url', 'https://secure.internal.test/laporan-keuangan');
+        $report = ReportSession::factory()->create();
+        $report->slideConfig()->create([
+            'enabled' => true,
+            'public_alias' => 'slide_masjid',
+            'token_hash' => hash('sha256', 'token-publik'),
+            'public_token' => 'token-publik',
+        ]);
+
+        $this->get('/slide_masjid')
+            ->assertRedirect('https://secure.internal.test/laporan-keuangan/slide/token-publik');
+    }
+
+    public function test_slide_settings_show_the_short_alias_as_the_public_tv_link(): void
+    {
+        config()->set('app.public_url', 'https://secure.internal.test/laporan-keuangan');
+        $admin = User::factory()->create();
+        $report = ReportSession::factory()->create();
+        ReportSessionMember::factory()->admin()->for($report, 'report')->for($admin)->create();
+        $report->slideConfig()->create([
+            'enabled' => true,
+            'public_alias' => 'slide_masjid',
+            'token_hash' => hash('sha256', 'token-publik'),
+            'public_token' => 'token-publik',
+        ]);
+
+        $this->actingAs($admin)->get(route('reports.settings', ['report' => $report, 'tab' => 'slide']))
+            ->assertOk()
+            ->assertSee('https://secure.internal.test/laporan-keuangan/slide_masjid', false)
+            ->assertSee('href="https://secure.internal.test/laporan-keuangan/slide_masjid"', false);
+    }
+
+    public function test_disabled_slide_alias_is_not_publicly_resolvable(): void
+    {
+        $report = ReportSession::factory()->create();
+        $report->slideConfig()->create([
+            'enabled' => false,
+            'public_alias' => 'slide_nonaktif',
+            'token_hash' => hash('sha256', 'token-publik'),
+            'public_token' => 'token-publik',
+        ]);
+
+        $this->get('/slide_nonaktif')->assertNotFound();
+    }
+
+    public function test_slide_alias_must_use_the_reserved_slide_prefix(): void
+    {
+        $admin = User::factory()->create();
+        $report = ReportSession::factory()->create();
+        ReportSessionMember::factory()->admin()->for($report, 'report')->for($admin)->create();
+        $report->slideConfig()->create();
+
+        $this->actingAs($admin)->put(route('slides.update', $report), [
+            'public_alias' => 'masjid',
+            'duration_seconds' => 12,
+            'refresh_seconds' => 60,
+            'background_opacity' => 14,
+        ])->assertSessionHasErrors([
+            'public_alias' => 'Alias slide harus diawali slide_ dan hanya boleh berisi huruf kecil, angka, garis bawah, atau tanda hubung.',
+        ]);
+
+        $this->assertDatabaseMissing('slide_configs', [
+            'report_session_id' => $report->id,
+            'public_alias' => 'masjid',
+        ]);
+    }
+
+    public function test_slide_alias_must_be_unique_across_reports(): void
+    {
+        $admin = User::factory()->create();
+        $existingReport = ReportSession::factory()->create();
+        $report = ReportSession::factory()->create();
+        $existingReport->slideConfig()->create(['public_alias' => 'slide_masjid']);
+        $report->slideConfig()->create();
+        ReportSessionMember::factory()->admin()->for($report, 'report')->for($admin)->create();
+
+        $this->actingAs($admin)->put(route('slides.update', $report), [
+            'public_alias' => 'slide_masjid',
+            'duration_seconds' => 12,
+            'refresh_seconds' => 60,
+            'background_opacity' => 14,
+        ])->assertSessionHasErrors([
+            'public_alias' => 'Alias slide sudah digunakan oleh laporan lain.',
+        ]);
+
+        $this->assertNull($report->slideConfig()->value('public_alias'));
+    }
+
     public function test_public_full_report_pdf_requires_an_enabled_valid_slide_token(): void
     {
         $report = ReportSession::factory()->create([

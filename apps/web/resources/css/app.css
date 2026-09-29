@@ -390,6 +390,10 @@ hr { margin: 1.5rem 0; border: 0; border-top: 1px solid #d9ded9; }
 .field { margin-bottom: .85rem; }
 .field label { display: block; margin-bottom: .35rem; font-weight: 700; }
 .field-help { display: block; margin-top: .32rem; color: #526158; font-size: .76rem; }
+.input-prefix { display: flex; align-items: stretch; overflow: hidden; border: 1px solid #98a69d; border-radius: 10px; background: #f5f8f6; }
+.input-prefix > span { display: flex; align-items: center; max-width: 62%; padding: .62rem .72rem; overflow: hidden; border-right: 1px solid #c8d0cb; color: #526158; font-size: .82rem; text-overflow: ellipsis; white-space: nowrap; }
+.input-prefix .input { min-width: 160px; border: 0; border-radius: 0; }
+.input-prefix:focus-within { border-color: #176b47; box-shadow: 0 0 0 3px rgba(23,107,71,.12); }
 .amount-presets { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .55rem; }
 .amount-presets button { flex: 0 0 auto; min-height: 32px; padding: .3rem .62rem; border: 1px solid rgba(18,55,42,.28); border-radius: 999px; background: rgba(255,255,255,.48); color: #12372a; font: inherit; font-size: .72rem; font-weight: 700; cursor: pointer; }
 .amount-presets button:hover, .amount-presets button:focus-visible { border-color: #12372a; background: rgba(18,55,42,.08); outline: none; }
@@ -637,6 +641,8 @@ textarea.input { min-height: 106px; resize: vertical; }
     .page-heading .primary-actions { grid-row: 2; }
     .primary-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
     .preview-metrics, .form-layout, .detail-grid, .admin-grid, .system-grid, .form-columns { grid-template-columns: 1fr; }
+    .input-prefix { display: grid; }
+    .input-prefix > span { max-width: none; padding-block: .48rem; border-right: 0; border-bottom: 1px solid #c8d0cb; font-size: .72rem; }
     .desktop-only { display: none; }
     .mobile-only { display: grid; }
     .transaction-cards { gap: .7rem; }

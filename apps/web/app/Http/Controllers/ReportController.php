@@ -89,8 +89,14 @@ class ReportController extends Controller
         $slidePublicUrl = $report->slideConfig?->enabled && filled($report->slideConfig->public_token)
             ? route('slides.show', $report->slideConfig->public_token)
             : null;
+        $slideAliasBaseUrl = rtrim((string) config('app.public_url'), '/').'/';
+        $slideAliasUrl = $report->slideConfig?->enabled
+            && filled($report->slideConfig->public_token)
+            && filled($report->slideConfig->public_alias)
+            ? $slideAliasBaseUrl.$report->slideConfig->public_alias
+            : null;
 
-        return view('reports.settings', compact('report', 'categories', 'members', 'availableUsers', 'audits', 'slidePublicUrl'));
+        return view('reports.settings', compact('report', 'categories', 'members', 'availableUsers', 'audits', 'slidePublicUrl', 'slideAliasBaseUrl', 'slideAliasUrl'));
     }
 
     public function update(UpdateReportRequest $request, ReportSession $report): RedirectResponse

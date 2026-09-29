@@ -11,6 +11,7 @@ use App\Http\Controllers\BackupController;
 use App\Http\Controllers\PeriodReportController;
 use App\Http\Controllers\PublicReportPdfController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SlideAliasController;
 use App\Http\Controllers\SlideController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,9 @@ Route::get('/slide/{token}/laporan-lengkap.pdf', PublicReportPdfController::clas
     ->middleware('throttle:10,1')
     ->name('slides.pdf');
 Route::get('/slide/{token}', [SlideController::class, 'show'])->name('slides.show');
+Route::get('/{alias}', SlideAliasController::class)
+    ->where('alias', 'slide_[a-z0-9_-]+')
+    ->name('slides.alias');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [AuthController::class, 'show'])->name('login');
